@@ -37,7 +37,7 @@ const Register = () => {
     },
   })
   return (
-    <section className=" min-h-screen bg-gray-50 dark:bg-gray-900">
+    <section className="min-h-screen p-5 bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="/"
@@ -71,7 +71,9 @@ const Register = () => {
                   placeholder="Enter First Name"
                 />
                 {formik.errors.firstName && formik.touched.firstName && (
-                  <div className="text-red-500">{formik.errors.firstName}</div>
+                  <div className="text-red-500 text-xs">
+                    {formik.errors.firstName}
+                  </div>
                 )}
               </div>
               <div>
@@ -91,7 +93,9 @@ const Register = () => {
                   placeholder="Enter Last Name"
                 />
                 {formik.errors.lastName && formik.touched.lastName && (
-                  <div className="text-red-500">{formik.errors.lastName}</div>
+                  <div className="text-red-500 text-xs">
+                    {formik.errors.lastName}
+                  </div>
                 )}
               </div>
               <div>
@@ -111,7 +115,9 @@ const Register = () => {
                   placeholder="name@company.com"
                 />
                 {formik.errors.email && formik.touched.email && (
-                  <div className="text-red-500">{formik.errors.email}</div>
+                  <div className="text-red-500 text-xs">
+                    {formik.errors.email}
+                  </div>
                 )}
               </div>
               <div>
@@ -131,7 +137,9 @@ const Register = () => {
                   placeholder="Enter your Mobile Number"
                 />
                 {formik.errors.phone && formik.touched.phone && (
-                  <div className="text-red-500">{formik.errors.phone}</div>
+                  <div className="text-red-500 text-xs">
+                    {formik.errors.phone}
+                  </div>
                 )}
               </div>
               <div>
@@ -151,7 +159,9 @@ const Register = () => {
                   placeholder="••••••••"
                 />
                 {formik.errors.password && formik.touched.password && (
-                  <div className="text-red-500">{formik.errors.password}</div>
+                  <div className="text-red-500 text-xs">
+                    {formik.errors.password}
+                  </div>
                 )}
               </div>
               <button
