@@ -1,13 +1,17 @@
 import React from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import AI from './axiosInstance'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
+  const nav = useNavigate()
   const formik = useFormik({
     initialValues: {
       firstName: '',
       lastName: '',
       phone: '',
+      username: '',
       email: '',
       password: '',
     },
@@ -17,6 +21,10 @@ const Register = () => {
         .max(50, 'Too Long!')
         .required('First name is required !'),
       lastName: Yup.string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Last name is required !'),
+      username: Yup.string()
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('Last name is required !'),
@@ -32,12 +40,31 @@ const Register = () => {
         .min(8, 'Password is too short - should be 8 chars minimum.')
         .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+    onSubmit: async ({
+      username,
+      email,
+      phone,
+      password,
+      firstName,
+      lastName,
+    }) => {
+      const registerInfo = {
+        username: username,
+        email: email,
+        password: password,
+        firstName: firstName,
+        LastName: lastName,
+        phone: phone,
+      }
+      console.log(registerInfo)
+      const res = await AI.post('/auth/local/register', registerInfo)
+      if (res.data.user) {
+        nav('/')
+      }
     },
   })
   return (
-    <section className="min-h-screen p-5 bg-gray-50 dark:bg-gray-900">
+    <section className="min-h-screen p-5 bg-gray-50 dark:bg-gray-900 ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="/"
@@ -90,6 +117,28 @@ const Register = () => {
                   type="text"
                   onChange={formik.handleChange}
                   value={formik.values.lastName}
+                  placeholder="Enter Last Name"
+                />
+                {formik.errors.lastName && formik.touched.lastName && (
+                  <div className="text-red-500 text-xs">
+                    {formik.errors.lastName}
+                  </div>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="username"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Username
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  id="username"
+                  name="username"
+                  type="text"
+                  onChange={formik.handleChange}
+                  value={formik.values.username}
                   placeholder="Enter Last Name"
                 />
                 {formik.errors.lastName && formik.touched.lastName && (

@@ -1,8 +1,11 @@
 import React from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import AI from './axiosInstance'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
+  const nav = useNavigate()
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -15,16 +18,28 @@ const Login = () => {
         .min(8, 'Password is too short - should be 8 chars minimum.')
         .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+    onSubmit: async ({ email, password }) => {
+      try {
+        const loginInfo = {
+          identifier: email,
+          password: password,
+        }
+        const res = await AI.post('/auth/local', loginInfo)
+        console.log(res.data)
+        const loginData = res.data
+        const user = res.data.user
+        if (loginData.jwt) {
+          nav('dashboard', { state: { user } })
+        }
+      } catch (error) {}
     },
   })
   return (
-    <section class="bg-gray-50 dark:bg-gray-900">
-      <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+    <section className="min-h-screen p-5 flex flex-col items-center justify-center overflow-hidden bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
             <form
