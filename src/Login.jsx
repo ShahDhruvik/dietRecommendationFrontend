@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import jwt_decaode from 'jwt-decode'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import AI from './axiosInstance'
@@ -6,6 +7,25 @@ import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const nav = useNavigate()
+  const handleCallbackResponse = (res) => {
+    console.log('Encoded JWT id token' + res.credential)
+    const user = jwt_decaode(res.credential)
+    console.log(user)
+  }
+  useEffect(() => {
+    /*global google */
+    google.accounts.id.initialize({
+      client_id:
+        '337101849292-mqnd350nik2vme4uk57kajl0a62h8un7.apps.googleusercontent.com',
+      callback: handleCallbackResponse,
+    })
+
+    google.accounts.id.renderButton(document.getElementById('googleBtn'), {
+      theme: 'outline',
+      size: 'extra-large',
+    })
+  }, [])
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -91,7 +111,7 @@ const Login = () => {
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                Create An Account
+                LogIn
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?
@@ -103,6 +123,7 @@ const Login = () => {
                 </a>
               </p>
             </form>
+            <div id="googleBtn" className="px-8"></div>
           </div>
         </div>
       </div>
